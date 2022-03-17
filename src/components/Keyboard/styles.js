@@ -1,12 +1,17 @@
 import styled from 'styled-components';
 
 export const StyledKeyboard = styled.div`
-  width: 510px;
+  width: 530px;
   display: flex;
   flex-wrap: wrap;
 `;
 
 export const Key = styled.button`
+  font-family: Monaco, 'Bitstream Vera Sans Mono', 'Lucida Console', Terminal, monospace;
+  display: flex;
+  padding: 1rem;
+  overflow: hidden;
+  font-size: 20px;
   width: 43px;
   height: 58px;
   border-radius: 4px;
@@ -22,6 +27,7 @@ export const Key = styled.button`
 
   &:nth-child(20),
   &:nth-child(28) {
-    width: 68px;
+    min-width: 68px;
+    width: fit-content;
   }
 `;

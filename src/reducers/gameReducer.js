@@ -1,29 +1,77 @@
 import { Actions } from './Actions';
 
+export const TileStates = {
+  DEFAULT: 'DEFAULT',
+  INCORRECT: 'INCORRECT',
+  WRONG_PLACE: 'WRONG_PLACE',
+  CORRECT: 'CORRECT',
+};
+
 export const initialState = {
   currentGuess: '',
   currentRow: 0,
   currentTile: 0,
   submittedGuess: '',
+  nerdle: '',
   gameMatrix: [
-    ['', '', '', '', ''],
-    ['', '', '', '', ''],
-    ['', '', '', '', ''],
-    ['', '', '', '', ''],
-    ['', '', '', '', ''],
-    ['', '', '', '', ''],
+    [
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+    ],
+    [
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+    ],
+    [
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+    ],
+    [
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+    ],
+    [
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+    ],
+    [
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+      { letter: '', state: TileStates.DEFAULT, isFlipped: false },
+    ],
   ],
 };
 
 export const gameReducer = (state, action) => {
   switch (action.type) {
+    case Actions.START:
+      return {
+        ...initialState,
+        nerdle: action.payload.nerdle,
+      };
+
     case Actions.SUBMIT_GUESS:
       return {
         ...state,
-        currentGuess: '',
         currentTile: 0,
         currentRow: state.currentRow + 1,
-        submittedGuess: action.payload.currentGuess,
       };
 
     case Actions.ADD_LETTER:
@@ -39,13 +87,13 @@ export const gameReducer = (state, action) => {
         gameMatrix: action.payload.currentGameMatrix,
         currentTile: state.currentTile - 1,
       };
+
+    case Actions.FLIP_TILE:
+      return {
+        ...state,
+        gameMatrix: action.payload.currentGameMatrix,
+      };
     default:
       break;
   }
 };
-
-// setCurrentGuess(input);
-// const currentMatrix = [...gameMatrix];
-// currentMatrix[currentRow][currentTile] = input.charAt(currentTile);
-// setGameMatrix(currentMatrix);
-// setCurrentTile(currentTile => currentTile + 1);
