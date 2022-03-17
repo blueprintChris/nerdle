@@ -1,39 +1,50 @@
-import { useReducer, useRef, useState } from 'react';
+import { useReducer } from 'react';
 import './App.css';
-import Keyboard from 'react-simple-keyboard';
+import Keyboard from './components/Keyboard';
 import { Actions } from './reducers/Actions';
 import { GameGrid, GameGridWrapper, GameRow, GameTile, KeyboardWrapper } from './styles';
 import { gameReducer, initialState } from './reducers/gameReducer';
-import 'react-simple-keyboard/build/css/index.css';
-
-const keyboardLayout = {
-  alpha: ['Q W E R T Y U I O P', 'A S D F G H J K L', '{enter} Z X C V B N M {bksp}'],
-};
 
 function App() {
+  const worldle = 'SUPER';
   const [{ currentRow, currentTile, currentGuess, submittedGuess, gameMatrix }, dispatch] = useReducer(gameReducer, initialState);
-  const keyboardRef = useRef(Keyboard);
 
   const handleKeyDown = button => {
     if (button === '{enter}') {
       if (currentGuess.length === 5) {
         dispatch({ type: Actions.SUBMIT_GUESS, payload: { currentGuess } });
-
-        keyboardRef.current.clearInput();
       } else {
         console.log('current guess must be 5 letters');
       }
     }
   };
 
-  const handleChange = input => {
-    if (!input) return;
+  const handleClick = key => {
+    if (key === '<<') {
+      removeLetter();
+    } else if (key === 'ENTER') {
+      checkRow();
+    } else {
+      addLetter(key);
+    }
+  };
 
-    if (input.length < 6) {
+  const checkRow = () => {};
+
+  const removeLetter = () => {
+    if (currentTile > 0 && currentTile <= 5) {
       const currentGameMatrix = [...gameMatrix];
-      currentGameMatrix[currentRow][currentTile] = input.charAt(currentTile);
+      currentGameMatrix[currentRow][currentTile - 1] = '';
 
-      dispatch({ type: Actions.ADD_LETTER, payload: { currentGameMatrix, currentGuess: input } });
+      dispatch({ type: Actions.REMOVE_LETTER, payload: { currentGameMatrix } });
+    }
+  };
+  const addLetter = key => {
+    if (currentTile < 5) {
+      const currentGameMatrix = [...gameMatrix];
+      currentGameMatrix[currentRow][currentTile] = key;
+
+      dispatch({ type: Actions.ADD_LETTER, payload: { currentGameMatrix } });
     }
   };
 
@@ -42,24 +53,19 @@ function App() {
       <h1>./Nerdle</h1>
       <GameGridWrapper>
         <GameGrid>
-          {gameMatrix.map((row, index) => (
-            <GameRow key={index}>
-              {row.map((tile, index) => (
-                <GameTile key={index}>{tile}</GameTile>
+          {gameMatrix.map((row, rowIndex) => (
+            <GameRow key={rowIndex} id={`guess-row-${rowIndex}`}>
+              {row.map((tile, tileIndex) => (
+                <GameTile key={tileIndex} id={`guess-tile-${rowIndex}-${tileIndex}`}>
+                  {tile}
+                </GameTile>
               ))}
             </GameRow>
           ))}
         </GameGrid>
       </GameGridWrapper>
       <KeyboardWrapper>
-        <Keyboard
-          keyboardRef={r => (keyboardRef.current = r)}
-          layout={keyboardLayout}
-          layoutName={'alpha'}
-          onChange={handleChange}
-          onKeyPress={handleKeyDown}
-          baseClass='keyboard1'
-        />
+        <Keyboard handleClick={handleClick} />
       </KeyboardWrapper>
     </div>
   );

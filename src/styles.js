@@ -35,6 +35,9 @@ export const GameTile = styled.div`
 `;
 
 export const KeyboardWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: black;
   width: 80%;
   background-color: rgba(0, 0, 0, 0);

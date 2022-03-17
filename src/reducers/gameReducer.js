@@ -29,11 +29,16 @@ export const gameReducer = (state, action) => {
     case Actions.ADD_LETTER:
       return {
         ...state,
-        currentGuess: action.payload.currentGuess,
         gameMatrix: action.payload.currentGameMatrix,
         currentTile: state.currentTile + 1,
       };
 
+    case Actions.REMOVE_LETTER:
+      return {
+        ...state,
+        gameMatrix: action.payload.currentGameMatrix,
+        currentTile: state.currentTile - 1,
+      };
     default:
       break;
   }
