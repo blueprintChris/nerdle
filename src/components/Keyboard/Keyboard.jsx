@@ -1,46 +1,26 @@
 import React from 'react';
-import { Key, StyledKeyboard } from './styles';
+import { TileStates } from '../../reducers/gameReducer';
+import { Key, KeyRow, StyledKeyboard } from './styles';
 
 const Keyboard = props => {
-  const { handleClick } = props;
-
-  const keys = [
-    'Q',
-    'W',
-    'E',
-    'R',
-    'T',
-    'Y',
-    'U',
-    'I',
-    'O',
-    'P',
-    'A',
-    'S',
-    'D',
-    'F',
-    'G',
-    'H',
-    'J',
-    'K',
-    'L',
-    'ENTER',
-    'Z',
-    'X',
-    'C',
-    'V',
-    'B',
-    'N',
-    'M',
-    '<<',
-  ];
+  const { handleClick, keyboardMatrix } = props;
 
   return (
     <StyledKeyboard>
-      {keys.map(key => (
-        <Key key={key} id={`button-${key}`} onClick={() => handleClick(key)}>
-          {key}
-        </Key>
+      {keyboardMatrix.map((keyRow, index) => (
+        <KeyRow key={index}>
+          {keyRow.map(key => (
+            <Key
+              key={key.letter}
+              id={`button-${key.letter}`}
+              onClick={() => handleClick(key.letter)}
+              state={key.state}
+              disabled={key.state === TileStates.INCORRECT}
+            >
+              {key.letter}
+            </Key>
+          ))}
+        </KeyRow>
       ))}
     </StyledKeyboard>
   );

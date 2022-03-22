@@ -8,7 +8,7 @@ import GameBoard from './components/GameBoard/GameBoard';
 import Header from './components/Header/Header';
 
 function App() {
-  const [{ currentRow, currentTile, gameMatrix, nerdle }, dispatch] = useReducer(gameReducer, initialState);
+  const [{ currentRow, currentTile, gameMatrix, keyboardMatrix, nerdle }, dispatch] = useReducer(gameReducer, initialState);
   const [isGameOver, setIsGameOver] = useState(false);
   const [isWin, setIsWin] = useState(false);
 
@@ -38,43 +38,63 @@ function App() {
       if (nerdle === guess) {
         setIsGameOver(true);
         setIsWin(true);
-      }
-
-      if (currentRow >= 5) {
+      } else if (currentRow >= 5) {
         setIsGameOver(true);
         setIsWin(false);
       }
 
-      dispatch({ type: Actions.SUBMIT_GUESS, payload: { currentGuess: guess } });
+      dispatch({ type: Actions.SUBMIT_GUESS });
     }
+  };
+
+  const addColourToKey = guess => {
+    const currentKeyboardMatrix = [...keyboardMatrix];
+    currentKeyboardMatrix.forEach(keyRow => {
+      const letter = keyRow.find(key => key.letter === guess.letter);
+      if (letter && (letter.state === TileStates.DEFAULT || (letter.state === TileStates.WRONG_PLACE && guess.state === TileStates.CORRECT))) {
+        letter.state = guess.state;
+      }
+    });
+
+    dispatch({ type: Actions.UPDATE_KEY_COLOR, payload: { currentKeyboardMatrix } });
   };
 
   const flipTiles = currentGameMatrix => {
     let tempWordle = nerdle;
-    const guessArray = [];
+    const guessRow = [];
 
     currentGameMatrix[currentRow].forEach(tile => {
-      guessArray.push({ letter: tile.letter, state: TileStates.INCORRECT });
+      guessRow.push({ letter: tile.letter, state: TileStates.INCORRECT });
     });
 
-    guessArray.forEach((guess, index) => {
+    guessRow.forEach((guess, index) => {
       if (guess.letter === nerdle[index]) {
         guess.state = TileStates.CORRECT;
+        addColourToKey(guess);
         tempWordle = tempWordle.replace(guess.letter, '*');
       }
     });
 
-    guessArray.forEach(guess => {
+    guessRow.forEach(guess => {
       if (tempWordle.includes(guess.letter)) {
         guess.state = TileStates.WRONG_PLACE;
+        addColourToKey(guess);
         tempWordle = tempWordle.replace(guess.letter, '*');
+      }
+    });
+
+    guessRow.forEach(guess => {
+      if (!tempWordle.includes(guess.letter)) {
+        console.log(guess.state);
+
+        addColourToKey(guess);
       }
     });
 
     currentGameMatrix[currentRow].forEach((tile, index) => {
       setTimeout(() => {
         tile.isFlipped = true;
-        tile.state = guessArray[index].state;
+        tile.state = guessRow[index].state;
 
         dispatch({ type: Actions.FLIP_TILE, payload: { currentGameMatrix } });
       }, index * 500);
@@ -107,10 +127,9 @@ function App() {
           <GameBoard gameMatrix={gameMatrix} />
         </GameGridWrapper>
         <KeyboardWrapper>
-          <Keyboard handleClick={handleClick} />
+          <Keyboard handleClick={handleClick} keyboardMatrix={keyboardMatrix} />
         </KeyboardWrapper>
       </GameWrapper>
-
       {isGameOver && isWin && 'Excellent!'}
       {isGameOver && !isWin && 'Unlucky. Maybe next time.'}
     </div>

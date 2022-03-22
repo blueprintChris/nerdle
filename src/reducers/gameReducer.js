@@ -57,6 +57,42 @@ export const initialState = {
       { letter: '', state: TileStates.DEFAULT, isFlipped: false },
     ],
   ],
+  keyboardMatrix: [
+    [
+      { letter: 'Q', state: TileStates.DEFAULT },
+      { letter: 'W', state: TileStates.DEFAULT },
+      { letter: 'E', state: TileStates.DEFAULT },
+      { letter: 'R', state: TileStates.DEFAULT },
+      { letter: 'T', state: TileStates.DEFAULT },
+      { letter: 'Y', state: TileStates.DEFAULT },
+      { letter: 'U', state: TileStates.DEFAULT },
+      { letter: 'I', state: TileStates.DEFAULT },
+      { letter: 'O', state: TileStates.DEFAULT },
+      { letter: 'P', state: TileStates.DEFAULT },
+    ],
+    [
+      { letter: 'A', state: TileStates.DEFAULT },
+      { letter: 'S', state: TileStates.DEFAULT },
+      { letter: 'D', state: TileStates.DEFAULT },
+      { letter: 'F', state: TileStates.DEFAULT },
+      { letter: 'G', state: TileStates.DEFAULT },
+      { letter: 'H', state: TileStates.DEFAULT },
+      { letter: 'J', state: TileStates.DEFAULT },
+      { letter: 'K', state: TileStates.DEFAULT },
+      { letter: 'L', state: TileStates.DEFAULT },
+    ],
+    [
+      { letter: 'ENTER', state: TileStates.DEFAULT },
+      { letter: 'Z', state: TileStates.DEFAULT },
+      { letter: 'X', state: TileStates.DEFAULT },
+      { letter: 'C', state: TileStates.DEFAULT },
+      { letter: 'V', state: TileStates.DEFAULT },
+      { letter: 'B', state: TileStates.DEFAULT },
+      { letter: 'N', state: TileStates.DEFAULT },
+      { letter: 'M', state: TileStates.DEFAULT },
+      { letter: '<<', state: TileStates.DEFAULT },
+    ],
+  ],
 };
 
 export const gameReducer = (state, action) => {
@@ -92,6 +128,12 @@ export const gameReducer = (state, action) => {
       return {
         ...state,
         gameMatrix: action.payload.currentGameMatrix,
+      };
+
+    case Actions.UPDATE_KEY_COLOR:
+      return {
+        ...state,
+        keyboardMatrix: action.payload.currentKeyboardMatrix,
       };
     default:
       break;

@@ -28,9 +28,9 @@ export const StyledGameTile = styled.div`
       case TileStates.INCORRECT:
         return 'rgba(58, 58, 60, 1)';
       case TileStates.WRONG_PLACE:
-        return 'orange';
+        return 'rgba(232, 205, 83, 0.8)';
       case TileStates.CORRECT:
-        return 'green';
+        return 'rgba(187, 232, 83, 0.8)';
       default:
         return 'rgba(58, 58, 60, 0)';
     }
@@ -38,5 +38,5 @@ export const StyledGameTile = styled.div`
   border: 2px solid #3a3a3c;
   font-size: 32px;
   font-weight: bold;
-  animation: ${props => (props.isFlipped ? css`0.5s linear ${flipping}` : '0')};
+  animation: ${props => (props.isFlipped ? css`0.5s ease-in ${flipping}` : '0')};
 `;
