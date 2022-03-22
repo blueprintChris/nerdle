@@ -21,6 +21,8 @@ export const Key = styled.button`
   height: 58px;
   border-radius: 4px;
   border: none;
+  color: #ffffff;
+  cursor: pointer;
   background-color: ${props => {
     switch (props.state) {
       case TileStates.DEFAULT:
@@ -35,8 +37,6 @@ export const Key = styled.button`
         return 'rgba(58, 58, 60, 0)';
     }
   }};
-  color: #ffffff;
-  cursor: pointer;
 
   &:hover {
     background-color: #999999;
@@ -85,7 +85,10 @@ export const KeyRow = styled.div`
       &:first-child,
       &:last-child {
         flex: 1.5;
-        font-size: 12px;
+      }
+
+      &:last-child {
+        background-color: rgba(255, 0, 0, 0.8);
       }
     }
   }

@@ -6,8 +6,7 @@ export const HeaderWrapper = styled.div`
   align-items: center;
   width: 100%;
   background-color: #121212;
-  height: 80px;
-
+  height: 60px;
   margin-bottom: 2rem;
 `;
 

@@ -21,6 +21,10 @@ export const StyledGameTile = styled.div`
   align-items: center;
   height: 62px;
   width: 62px;
+  border: 2px solid #3a3a3c;
+  font-size: 32px;
+  font-weight: bold;
+  animation: ${props => (props.isFlipped ? css`0.5s ease-in ${flipping}` : '0')};
   background-color: ${props => {
     switch (props.state) {
       case TileStates.DEFAULT:
@@ -35,8 +39,4 @@ export const StyledGameTile = styled.div`
         return 'rgba(58, 58, 60, 0)';
     }
   }};
-  border: 2px solid #3a3a3c;
-  font-size: 32px;
-  font-weight: bold;
-  animation: ${props => (props.isFlipped ? css`0.5s ease-in ${flipping}` : '0')};
 `;

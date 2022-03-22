@@ -11,14 +11,15 @@ function App() {
   const [{ currentRow, currentTile, gameMatrix, keyboardMatrix, nerdle }, dispatch] = useReducer(gameReducer, initialState);
   const [isGameOver, setIsGameOver] = useState(false);
   const [isWin, setIsWin] = useState(false);
+  const [flipSpeed] = useState(500);
 
   useEffect(() => {
-    dispatch({ type: Actions.START, payload: { nerdle: 'HACKS' } });
+    dispatch({ type: Actions.START, payload: { nerdle: 'MARIO' } });
   }, []);
 
   const handleClick = key => {
     if (!isGameOver) {
-      if (key === '<<') {
+      if (key === '⟵') {
         removeLetter();
       } else if (key === 'ENTER') {
         checkRow();
@@ -47,21 +48,21 @@ function App() {
     }
   };
 
-  const addColourToKey = guess => {
-    const currentKeyboardMatrix = [...keyboardMatrix];
-    currentKeyboardMatrix.forEach(keyRow => {
+  const copyMatrix = matrix => matrix.map(keyRow => keyRow.map(key => ({ ...key })));
+
+  const addColourToKey = (guess, keyMatrix) => {
+    keyMatrix.forEach(keyRow => {
       const letter = keyRow.find(key => key.letter === guess.letter);
       if (letter && (letter.state === TileStates.DEFAULT || (letter.state === TileStates.WRONG_PLACE && guess.state === TileStates.CORRECT))) {
         letter.state = guess.state;
       }
     });
-
-    dispatch({ type: Actions.UPDATE_KEY_COLOR, payload: { currentKeyboardMatrix } });
   };
 
   const flipTiles = currentGameMatrix => {
     let tempWordle = nerdle;
     const guessRow = [];
+    const currentKeyboardMatrix = copyMatrix(keyboardMatrix);
 
     currentGameMatrix[currentRow].forEach(tile => {
       guessRow.push({ letter: tile.letter, state: TileStates.INCORRECT });
@@ -70,7 +71,7 @@ function App() {
     guessRow.forEach((guess, index) => {
       if (guess.letter === nerdle[index]) {
         guess.state = TileStates.CORRECT;
-        addColourToKey(guess);
+        addColourToKey(guess, currentKeyboardMatrix);
         tempWordle = tempWordle.replace(guess.letter, '*');
       }
     });
@@ -78,16 +79,14 @@ function App() {
     guessRow.forEach(guess => {
       if (tempWordle.includes(guess.letter)) {
         guess.state = TileStates.WRONG_PLACE;
-        addColourToKey(guess);
+        addColourToKey(guess, currentKeyboardMatrix);
         tempWordle = tempWordle.replace(guess.letter, '*');
       }
     });
 
     guessRow.forEach(guess => {
       if (!tempWordle.includes(guess.letter)) {
-        console.log(guess.state);
-
-        addColourToKey(guess);
+        addColourToKey(guess, currentKeyboardMatrix);
       }
     });
 
@@ -97,8 +96,12 @@ function App() {
         tile.state = guessRow[index].state;
 
         dispatch({ type: Actions.FLIP_TILE, payload: { currentGameMatrix } });
-      }, index * 500);
+      }, index * flipSpeed);
     });
+
+    setTimeout(() => {
+      dispatch({ type: Actions.UPDATE_KEY_COLOR, payload: { currentKeyboardMatrix } });
+    }, (currentGameMatrix.length - 1) * flipSpeed);
   };
 
   const removeLetter = () => {

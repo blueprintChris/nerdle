@@ -90,7 +90,7 @@ export const initialState = {
       { letter: 'B', state: TileStates.DEFAULT },
       { letter: 'N', state: TileStates.DEFAULT },
       { letter: 'M', state: TileStates.DEFAULT },
-      { letter: '<<', state: TileStates.DEFAULT },
+      { letter: '⟵', state: TileStates.DEFAULT },
     ],
   ],
 };
@@ -135,6 +135,7 @@ export const gameReducer = (state, action) => {
         ...state,
         keyboardMatrix: action.payload.currentKeyboardMatrix,
       };
+
     default:
       break;
   }
