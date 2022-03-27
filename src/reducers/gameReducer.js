@@ -9,7 +9,7 @@ export const gameReducer = (state, action) => {
         nerdle: action.payload.nerdle,
       };
 
-    case Actions.SUBMIT_GUESS:
+    case Actions.GO_NEXT_ROW:
       return {
         ...state,
         currentTile: 0,
@@ -40,6 +40,20 @@ export const gameReducer = (state, action) => {
       return {
         ...state,
         keyboardMatrix: action.payload.currentKeyboardMatrix,
+      };
+
+    case Actions.GAME_OVER_WIN:
+      return {
+        ...state,
+        isGameOver: true,
+        isWin: true,
+      };
+
+    case Actions.GAME_OVER_LOSS:
+      return {
+        ...state,
+        isGameOver: true,
+        isWin: false,
       };
 
     default:
