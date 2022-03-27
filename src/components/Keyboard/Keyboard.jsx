@@ -1,5 +1,5 @@
 import React from 'react';
-import { TileStates } from '../../reducers/gameReducer';
+import { TileStates } from '../../helpers/consts';
 import { Key, KeyRow, StyledKeyboard } from './styles';
 
 const Keyboard = props => {

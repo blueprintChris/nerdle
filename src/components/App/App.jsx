@@ -1,21 +1,31 @@
 import { useEffect, useReducer, useState } from 'react';
-import './App.css';
-import Keyboard from './components/Keyboard/Keyboard';
-import { Actions } from './reducers/Actions';
-import { GameGridWrapper, GameWrapper, KeyboardWrapper } from './styles';
-import { gameReducer, initialState, TileStates } from './reducers/gameReducer';
-import GameBoard from './components/GameBoard/GameBoard';
-import Header from './components/Header/Header';
+import { ThemeProvider } from 'styled-components';
+import { darkTheme, lightTheme } from '../../themes';
+import { Actions } from '../../reducers/Actions';
+import { gameReducer } from '../../reducers/gameReducer';
+import { initialState } from '../../reducers/initialState';
+import { TileStates } from '../../helpers/consts';
+import GameBoard from '../GameBoard/GameBoard';
+import Header from '../Header/Header';
+import Keyboard from '../Keyboard/Keyboard';
+import { GameGridWrapper, GameWrapper, KeyboardWrapper, StyledApp } from './styles';
+import { GlobalStyle } from '../../globalStyle';
 
 function App() {
   const [{ currentRow, currentTile, gameMatrix, keyboardMatrix, nerdle }, dispatch] = useReducer(gameReducer, initialState);
   const [isGameOver, setIsGameOver] = useState(false);
   const [isWin, setIsWin] = useState(false);
   const [flipSpeed] = useState(500);
+  const [theme, setTheme] = useState('light');
 
   useEffect(() => {
     dispatch({ type: Actions.START, payload: { nerdle: 'MARIO' } });
   }, []);
+
+  const handleThemeChange = e => {
+    const isDark = e.target.checked;
+    isDark ? setTheme('dark') : setTheme('light');
+  };
 
   const handleClick = key => {
     if (!isGameOver) {
@@ -123,19 +133,22 @@ function App() {
   };
 
   return (
-    <div className='App'>
-      <Header />
-      <GameWrapper>
-        <GameGridWrapper>
-          <GameBoard gameMatrix={gameMatrix} />
-        </GameGridWrapper>
-        <KeyboardWrapper>
-          <Keyboard handleClick={handleClick} keyboardMatrix={keyboardMatrix} />
-        </KeyboardWrapper>
-      </GameWrapper>
-      {isGameOver && isWin && 'Excellent!'}
-      {isGameOver && !isWin && 'Unlucky. Maybe next time.'}
-    </div>
+    <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
+      <GlobalStyle />
+      <StyledApp>
+        <Header handleThemeChange={handleThemeChange} />
+        <GameWrapper>
+          <GameGridWrapper>
+            <GameBoard gameMatrix={gameMatrix} />
+          </GameGridWrapper>
+          <KeyboardWrapper>
+            <Keyboard handleClick={handleClick} keyboardMatrix={keyboardMatrix} />
+          </KeyboardWrapper>
+        </GameWrapper>
+        {isGameOver && isWin && 'Excellent!'}
+        {isGameOver && !isWin && 'Unlucky. Maybe next time.'}
+      </StyledApp>
+    </ThemeProvider>
   );
 }
 

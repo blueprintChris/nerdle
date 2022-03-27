@@ -1,5 +1,5 @@
 import styled, { keyframes, css } from 'styled-components';
-import { TileStates } from '../../../reducers/gameReducer';
+import { TileStates } from '../../../helpers/consts';
 
 const flipping = keyframes`
   0% {
@@ -16,27 +16,29 @@ const flipping = keyframes`
 `;
 
 export const StyledGameTile = styled.div`
+  -webkit-text-stroke: ${({ state }) => (state === TileStates.CORRECT || state === TileStates.WRONG_PLACE ? '1px black' : '0 black')};
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 62px;
-  width: 62px;
-  border: 2px solid #3a3a3c;
-  font-size: 32px;
+  height: 58px;
+  width: 58px;
+  border: 2px solid ${({ theme }) => theme.gameBoard.tile.border};
+  font-size: 4rem;
   font-weight: bold;
-  animation: ${props => (props.isFlipped ? css`0.5s ease-in ${flipping}` : '0')};
-  background-color: ${props => {
-    switch (props.state) {
+  color: ${({ isFlipped, theme }) => (isFlipped ? theme.gameBoard.tile.font.color.flipped : theme.gameBoard.tile.font.color.default)};
+  animation: ${({ isFlipped }) => (isFlipped ? css`0.5s ease-in ${flipping}` : '0')};
+  background-color: ${({ state, theme }) => {
+    switch (state) {
       case TileStates.DEFAULT:
-        return 'rgba(58, 58, 60, 0)';
+        return theme.gameBoard.tile.background.default;
       case TileStates.INCORRECT:
-        return 'rgba(58, 58, 60, 1)';
+        return theme.gameBoard.tile.background.absent;
       case TileStates.WRONG_PLACE:
-        return 'rgba(232, 205, 83, 0.8)';
+        return theme.gameBoard.tile.background.present;
       case TileStates.CORRECT:
-        return 'rgba(187, 232, 83, 0.8)';
+        return theme.gameBoard.tile.background.correct;
       default:
-        return 'rgba(58, 58, 60, 0)';
+        return theme.gameBoard.tile.background.default;
     }
   }};
 `;

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { TileStates } from '../../reducers/gameReducer';
+import { TileStates } from '../../helpers/consts';
 
 export const StyledKeyboard = styled.div`
   display: flex;
@@ -23,35 +23,35 @@ export const Key = styled.button`
   border: none;
   color: #ffffff;
   cursor: pointer;
-  background-color: ${props => {
-    switch (props.state) {
+  background-color: ${({ state, theme }) => {
+    switch (state) {
       case TileStates.DEFAULT:
-        return '#818384';
+        return theme.keyboard.background.default;
       case TileStates.INCORRECT:
-        return 'rgba(58, 58, 60, 1)';
+        return theme.keyboard.background.absent;
       case TileStates.WRONG_PLACE:
-        return 'rgba(232, 205, 83, 0.8)';
+        return theme.keyboard.background.present;
       case TileStates.CORRECT:
-        return 'rgba(187, 232, 83, 0.8)';
+        return theme.keyboard.background.correct;
       default:
-        return 'rgba(58, 58, 60, 0)';
+        return theme.keyboard.background.default;
     }
   }};
 
   &:hover {
-    background-color: #999999;
+    background-color: ${({ theme }) => theme.keyboard.hover.background};
   }
 
   &:active {
-    background-color: #555555;
-    box-shadow: 1px 0px 93px -43px rgba(0, 0, 0, 1) inset;
+    background-color: ${({ theme }) => theme.keyboard.active.background};
+    box-shadow: ${({ theme }) => theme.keyboard.active.boxShadow};
   }
 
   &:disabled {
     cursor: default;
 
     &:hover {
-      background-color: rgba(58, 58, 60, 1);
+      background-color: ${({ theme }) => theme.keyboard.disabled.hover.background};
     }
   }
 `;
