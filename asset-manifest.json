@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.js": "/nerdle/static/js/main.093b7db4.js",
+    "static/js/787.781f5e4c.chunk.js": "/nerdle/static/js/787.781f5e4c.chunk.js",
+    "index.html": "/nerdle/index.html",
+    "main.093b7db4.js.map": "/nerdle/static/js/main.093b7db4.js.map",
+    "787.781f5e4c.chunk.js.map": "/nerdle/static/js/787.781f5e4c.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.093b7db4.js"
+  ]
+}
